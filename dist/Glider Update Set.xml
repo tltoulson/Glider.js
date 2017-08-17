@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<unload unload_date="2017-08-16 17:01:29">
+<unload unload_date="2017-08-17 02:48:46">
 <sys_remote_update_set action="INSERT_OR_UPDATE">
 <application display_value="Global">global</application>
 <application_name>Global</application_name>
@@ -21,11 +21,11 @@
 <summary/>
 <sys_class_name>sys_remote_update_set</sys_class_name>
 <sys_created_by>admin</sys_created_by>
-<sys_created_on>2017-08-16 17:01:29</sys_created_on>
-<sys_id>58a701360f2003002203943be1050e04</sys_id>
+<sys_created_on>2017-08-17 02:48:46</sys_created_on>
+<sys_id>870e03f60fa003002203943be1050e2b</sys_id>
 <sys_mod_count>0</sys_mod_count>
 <sys_updated_by>admin</sys_updated_by>
-<sys_updated_on>2017-08-16 17:01:29</sys_updated_on>
+<sys_updated_on>2017-08-17 02:48:46</sys_updated_on>
 <update_set display_value=""/>
 <update_source display_value=""/>
 <updated/>
@@ -36,225 +36,24 @@
 <category>customer</category>
 <comments/>
 <name>sys_script_include_ae78ec0b0f1003002203943be1050ed5</name>
-<payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_script_include"&gt;&lt;sys_script_include action="INSERT_OR_UPDATE"&gt;&lt;access&gt;public&lt;/access&gt;&lt;active&gt;true&lt;/active&gt;&lt;api_name&gt;global.Glider&lt;/api_name&gt;&lt;client_callable&gt;false&lt;/client_callable&gt;&lt;description&gt;A collection pipeline utility library for use with GlideRecord's, arrays, and other ServiceNow server side collections.  &lt;/description&gt;&lt;name&gt;Glider&lt;/name&gt;&lt;script&gt;&lt;![CDATA[var Glider = (function() {
-  function Sequence() {}
-
-  Sequence.prototype.forEach = function(callback) {
-    var el;
-
-    while (this.next()) {
-      el = this.current();
-      callback(el);
-    }
-  };
-
-  Sequence.prototype.map = function(callback) {
-    return new MapSequence(this, callback);
-  };
-
-  Sequence.prototype.filter = function(filterFn) {
-    return new FilterSequence(this, filterFn);
-  };
-
-  Sequence.prototype.value = function() {
-    var vals = [];
-
-    this.forEach(function(el) {
-      vals.push(el);
-    });
-
-    return vals;
-  };
-
-  Sequence.prototype.reduce = function(callback, initialValue) {
-    var accum = initialValue,
-      temp;
-
-    if (accum === undefined &amp;&amp; this.next()) {
-      accum = this.current();
-    }
-
-    this.forEach(function(el) {
-      accum = callback(accum, el);
-    });
-
-    return accum;
-  };
-
-  Sequence.prototype.chunk = function(size) {
-    return new ChunkSequence(this, size);
-  };
-
-  function GlideRecordSequence(table, query) {
-    if (query) {
-      this.gr = new GlideRecord(table);
-      this.gr.addEncodedQuery(query);
-    }
-    else {
-      this.gr = table;
-    }
-
-    this.gr.query();
-  }
-
-  GlideRecordSequence.prototype = Object.create(Sequence.prototype);
-  GlideRecordSequence.prototype.constructor = GlideRecordSequence;
-
-  GlideRecordSequence.prototype.next = function() {
-    return this.gr.next();
-  };
-
-  GlideRecordSequence.prototype.current = function() {
-    return this.gr;
-  };
-
-  function ArraySequence(arr) {
-    this.parent = this;
-    this.ix = -1;
-    this.arr = arr;
-  }
-
-  ArraySequence.prototype = Object.create(Sequence.prototype);
-  ArraySequence.prototype.constructor = ArraySequence;
-
-  ArraySequence.prototype.next = function() {
-    this.ix++;
-    return this.ix &lt; this.arr.length;
-  };
-
-  ArraySequence.prototype.current = function() {
-    return this.arr[this.ix];
-  };
-
-  function MapSequence(parent, callback) {
-    this.parent = parent;
-    this.ix = -1;
-    this.callback = callback;
-  }
-
-  MapSequence.prototype = Object.create(Sequence.prototype);
-  MapSequence.prototype.constructor = MapSequence;
-
-  MapSequence.prototype.next = function() {
-    this.ix++;
-    return this.parent.next();
-  };
-
-  MapSequence.prototype.current = function() {
-    return this.callback(this.parent.current(), this.ix);
-  };
-
-  function FilterSequence(parent, callback) {
-    this.parent = parent;
-    this.callback = callback;
-    this.el = undefined;
-  }
-
-  FilterSequence.prototype = Object.create(Sequence.prototype);
-  FilterSequence.prototype.constructor = FilterSequence;
-
-  FilterSequence.prototype.next = function() {
-    while (this.parent.next()) {
-      this.el = this.parent.current();
-      if (this.callback(this.el)) {
-        return true;
-      }
-    }
-
-    return false;
-  };
-
-  FilterSequence.prototype.current = function() {
-    return this.el;
-  };
-
-  function ChunkSequence(parent, size) {
-    this.parent = parent;
-    this.size = size;
-  }
-
-  ChunkSequence.prototype = Object.create(Sequence.prototype);
-  ChunkSequence.prototype.constructor = ChunkSequence;
-
-  ChunkSequence.prototype.next = function() {
-    return this.parent.next();
-  };
-
-  ChunkSequence.prototype.current = function() {
-    return new ChunkItemSequence(this, this.size);
-  };
-
-  ChunkSequence.prototype.value = function() {
-    var vals = [];
-
-    this.forEach(function(chunk) {
-      vals.push(chunk.value());
-    });
-
-    return vals;
-  };
-
-  function ChunkItemSequence(parent, size) {
-    this.parent = parent;
-    this.remaining = size;
-    this.first = true;
-  }
-
-  ChunkItemSequence.prototype = Object.create(Sequence.prototype);
-  ChunkItemSequence.prototype.constructor = ChunkItemSequence;
-
-  ChunkItemSequence.prototype.next = function() {
-    if (this.first) {
-      this.first = false;
-      this.remaining--;
-      return true;
-    }
-
-    if (this.remaining-- &amp;&amp; this.parent.next()) {
-      return true;
-    }
-
-    return false;
-  };
-
-  ChunkItemSequence.prototype.current = function() {
-    return this.parent.parent.current();
-  };
-
-  function CollectionWrapper(col, query) {
-    if (Array.isArray(col)) {
-      return new ArraySequence(col);
-    }
-    else if (col.toString() == '[object GlideRecord]' || col.toString() == '[object ScopedGlideRecord]') {
-      return new GlideRecordSequence(col);
-    }
-    else if (query &amp;&amp; typeof col == 'string') {
-      return new GlideRecordSequence(col, query);
-    }
-    else {
-      throw 'Collection is not recognized as a GlideRecord or Array';
-    }
-  }
-
-  return CollectionWrapper;
-})();
-]]&gt;&lt;/script&gt;&lt;sys_class_name&gt;sys_script_include&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2017-08-04 23:10:15&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_id&gt;ae78ec0b0f1003002203943be1050ed5&lt;/sys_id&gt;&lt;sys_mod_count&gt;4&lt;/sys_mod_count&gt;&lt;sys_name&gt;Glider&lt;/sys_name&gt;&lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_script_include_ae78ec0b0f1003002203943be1050ed5&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2017-08-16 17:01:16&lt;/sys_updated_on&gt;&lt;/sys_script_include&gt;&lt;/record_update&gt;</payload>
-<payload_hash>1744162753</payload_hash>
-<remote_update_set display_value="Glider">58a701360f2003002203943be1050e04</remote_update_set>
+<payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_script_include"&gt;&lt;sys_script_include action="INSERT_OR_UPDATE"&gt;&lt;access&gt;public&lt;/access&gt;&lt;active&gt;true&lt;/active&gt;&lt;api_name&gt;global.Glider&lt;/api_name&gt;&lt;client_callable&gt;false&lt;/client_callable&gt;&lt;description&gt;A collection pipeline utility library for use with GlideRecord's, arrays, and other ServiceNow server side collections.  &lt;/description&gt;&lt;name&gt;Glider&lt;/name&gt;&lt;script&gt;&lt;![CDATA[var Glider=function(){function t(){}function r(t,r){"string"==typeof t?(this.gr=new GlideRecord(t),this.gr.addEncodedQuery(r)):this.gr=t,this.gr.query()}function e(t){this.parent=this,this.ix=-1,this.arr=t}function n(t,r){this.parent=t,this.ix=-1,this.callback=r}function o(t,r){this.parent=t,this.callback=r,this.el=void 0}function i(t,r){this.parent=t,this.size=r}function p(t,r){this.parent=t,this.remaining=r,this.first=!0}return t.prototype.forEach=function(t){for(;this.next();)t(this.current())},t.prototype.map=function(t){return new n(this,t)},t.prototype.filter=function(t){return new o(this,t)},t.prototype.value=function(){var t=[];return this.forEach(function(r){t.push(r)}),t},t.prototype.reduce=function(t,r){var e=r;return void 0===e&amp;&amp;this.next()&amp;&amp;(e=this.current()),this.forEach(function(r){e=t(e,r)}),e},t.prototype.chunk=function(t){return new i(this,t)},r.prototype=Object.create(t.prototype),r.prototype.constructor=r,r.prototype.next=function(){return this.gr.next()},r.prototype.current=function(){return this.gr},e.prototype=Object.create(t.prototype),e.prototype.constructor=e,e.prototype.next=function(){return++this.ix&lt;this.arr.length},e.prototype.current=function(){return this.arr[this.ix]},n.prototype=Object.create(t.prototype),n.prototype.constructor=n,n.prototype.next=function(){return this.ix++,this.parent.next()},n.prototype.current=function(){return this.callback(this.parent.current(),this.ix)},o.prototype=Object.create(t.prototype),o.prototype.constructor=o,o.prototype.next=function(){for(;this.parent.next();)if(this.el=this.parent.current(),this.callback(this.el))return!0;return!1},o.prototype.current=function(){return this.el},i.prototype=Object.create(t.prototype),i.prototype.constructor=i,i.prototype.next=function(){return this.parent.next()},i.prototype.current=function(){return new p(this,this.size)},i.prototype.value=function(){var t=[];return this.forEach(function(r){t.push(r.value())}),t},p.prototype=Object.create(t.prototype),p.prototype.constructor=p,p.prototype.next=function(){return this.first?(this.first=!1,this.remaining--,!0):!(!this.remaining--||!this.parent.next())},p.prototype.current=function(){return this.parent.parent.current()},function(t,n){if(Array.isArray(t))return new e(t);if("[object GlideRecord]"==t.toString()||"[object ScopedGlideRecord]"==t.toString())return new r(t);if("string"==typeof t)return new r(t,n);throw"Collection is not recognized as a GlideRecord or Array"}}();
+]]&gt;&lt;/script&gt;&lt;sys_class_name&gt;sys_script_include&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2017-08-04 23:10:15&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_id&gt;ae78ec0b0f1003002203943be1050ed5&lt;/sys_id&gt;&lt;sys_mod_count&gt;5&lt;/sys_mod_count&gt;&lt;sys_name&gt;Glider&lt;/sys_name&gt;&lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_script_include_ae78ec0b0f1003002203943be1050ed5&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2017-08-17 02:46:53&lt;/sys_updated_on&gt;&lt;/sys_script_include&gt;&lt;/record_update&gt;</payload>
+<payload_hash>-533638619</payload_hash>
+<remote_update_set display_value="Glider">870e03f60fa003002203943be1050e2b</remote_update_set>
 <replace_on_upgrade>false</replace_on_upgrade>
 <sys_created_by>admin</sys_created_by>
-<sys_created_on>2017-08-16 17:01:29</sys_created_on>
-<sys_id>5ca701360f2003002203943be1050e04</sys_id>
+<sys_created_on>2017-08-17 02:48:46</sys_created_on>
+<sys_id>4b0e03f60fa003002203943be1050e2b</sys_id>
 <sys_mod_count>0</sys_mod_count>
-<sys_recorded_at>15debfdf9520000001</sys_recorded_at>
+<sys_recorded_at>15dee1620530000001</sys_recorded_at>
 <sys_updated_by>admin</sys_updated_by>
-<sys_updated_on>2017-08-16 17:01:29</sys_updated_on>
+<sys_updated_on>2017-08-17 02:48:46</sys_updated_on>
 <table/>
 <target_name>Glider</target_name>
 <type>Script Include</type>
 <update_domain>global</update_domain>
-<update_guid>5d97c9f2ae200300a73e0c7d886454f8</update_guid>
-<update_guid_history>5d97c9f2ae200300a73e0c7d886454f8:1744162753,9380d155be60030078ca4cf2e258c7ed:-978544389,059be147ae900300acf78c1be7e1e2f2:1742777179,7779e4c3eb1003001e7cd4485104b70b:1602007096,d1f8ac0b67100300ab506441cca45d6e:966466813</update_guid_history>
+<update_guid>ef9d43fa6ae0030021be188a6a3d442d</update_guid>
+<update_guid_history>ef9d43fa6ae0030021be188a6a3d442d:-533638619,5d97c9f2ae200300a73e0c7d886454f8:1744162753,9380d155be60030078ca4cf2e258c7ed:-978544389,059be147ae900300acf78c1be7e1e2f2:1742777179,7779e4c3eb1003001e7cd4485104b70b:1602007096,d1f8ac0b67100300ab506441cca45d6e:966466813</update_guid_history>
 <update_set display_value=""/>
 <view/>
 </sys_update_xml>

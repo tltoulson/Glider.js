@@ -12,7 +12,7 @@ Grab the Glider Update Set.xml Update Set under the dist folder and install it i
 
 **Scoped Application Script Include**
 
-Create a new Script Include called "Glider" in your ServiceNow Scoped Application.  Paste the contents of the Glider.js file directly into the Script Include script field and save the record.
+Create a new Script Include called "Glider" in your ServiceNow Scoped Application.  Paste the contents of the Glider.js or the Glider.min.js file directly into the Script Include script field and save the record.
 
 ## Introduction
 

@@ -13,6 +13,11 @@ describe('Glider(x) wrapper', function() {
     expect(Glider('incident', 'short_description=Glider Test').constructor.name)
       .toBe('GlideRecordSequence');
   });
+
+  it('returns a GlideRecordSequence when passed a table name and an empty encoded query as strings', function() {
+    expect(Glider('incident', '').constructor.name)
+      .toBe('GlideRecordSequence');
+  });
 });
 
 describe('Glider(x).value()', function() {
